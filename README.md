@@ -109,7 +109,7 @@ services:
 Other services can connect to the broadcast WebSocket via:
 
 ```code
-ws://obs-websocket:8002
+ws://obs-websocket:8000
 ```
 
 ## What This Service Provides
