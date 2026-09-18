@@ -10,13 +10,36 @@ import websockets
 
 # WebSocket broadcast service
 
+global_obs_ws = None
+
 clients = set()
+
+async def handle_command(msg):
+    try:
+        data = json.loads(msg)
+    except:
+        print("Invalid JSON command received")
+        return
+
+    # Example command: update OBS input
+    if data.get("type") == "set_input":
+        input_name = data.get("inputName")
+        input_settings = data.get("inputSettings")
+
+        if global_obs_ws:
+            global_obs_ws.call(requests.SetInputSettings(
+                inputName=input_name,
+                inputSettings=input_settings,
+                overlay=False
+            ))
+            print(f"Updated OBS input: {input_name}")
+
 
 async def ws_handler(ws):
     clients.add(ws)
     try:
-        async for _ in ws:
-            pass
+        async for msg in ws:
+            await handle_command(msg)
     finally:
         clients.remove(ws)
 
@@ -27,7 +50,7 @@ async def broadcast_event(event):
         await ws.send(data)
 
 async def start_ws_server():
-    async with websockets.serve(ws_handler, "0.0.0.0", 8002):
+    async with websockets.serve(ws_handler, "0.0.0.0", 8000):
         await asyncio.Future()
 
 
@@ -88,11 +111,11 @@ def twitch_chat_listener(ws):
                 print("Message:", message)
 
                 text = f"{display_name}: {message}"
-                encoded_text = urllib.parse.quote(text)
+                # encoded_text = urllib.parse.quote(text)
 
                 ws.call(requests.SetInputSettings(
                     inputName="Latest Chat Message",
-                    inputSettings={"text": encoded_text},
+                    inputSettings={"text": text},
                     overlay=False
                 ))
 
