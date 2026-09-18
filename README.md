@@ -1,5 +1,9 @@
 # Default OBS-websocket Service
 
+
+## NOTE! See issues for current flaws in app!
+
+
 ## Overview
 The **Default OBS-websocket** service acts as a Twitch → OBS → WebSocket bridge.  
 It listens to Twitch chat messages, updates OBS sources, and broadcasts events to other services in a multi‑service environment.
