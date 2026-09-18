@@ -25,6 +25,8 @@ def main():
         )
         ws_server_thread.start()
 
+        connection.global_obs_ws = ws
+
         print("System running...")
 
         # Block main thread without burning CPU
