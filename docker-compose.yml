@@ -1,0 +1,16 @@
+# this docker-compose.yml file is used if you want the OBS-websocket 
+# to run as an individual service. If you want multiple services
+# proceed to use Dockerfile setup that is prepared for you!
+
+
+name: twitch-services
+
+services:
+  obs-websocket:
+    build: .
+    container_name: twitch-message-bot
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./app/secrets:/app/secrets
+    restart: unless-stopped
